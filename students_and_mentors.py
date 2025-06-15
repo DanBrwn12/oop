@@ -117,45 +117,84 @@ class Reviewer(Mentor):
                 f"Фамилия: {self.surname}\n")
 
 
-lecturer = Lecturer('Иван', 'Иванов')
-reviewer = Reviewer('Пётр', 'Петров')
+# Студенты
 student = Student('Алёхина', 'Ольга', 'Ж')
+student_2 = Student('Сергей', 'Сидоров', 'М')
 
-student.finished_courses += ['Введение в программирование']
+# Лекторы
+lecturer = Lecturer('Иван', 'Иванов')
+lecturer_2 = Lecturer('Жанна', 'Баклажанова')
 
+# Проверяющие
+reviewer = Reviewer('Пётр', 'Петров')
+reviewer_2 = Reviewer('Максим', 'Галкин')
+
+# Добавляем курсы студентам
 student.courses_in_progress += ['Python', 'Java']
-lecturer.courses_attached += ['Python', 'C++']
-reviewer.courses_attached += ['Python', 'C++']
+student_2.courses_in_progress += ['C++']
 
+# Добавляем курсы лектрам и проверяющим
+lecturer.courses_attached += ['Python', 'C++']
+lecturer_2.courses_attached += ['JS', 'Java', 'C++']
+reviewer.courses_attached += ['Python', 'C++']
+reviewer_2.courses_attached += ['JS', 'Java', 'C++']
+
+# Добавляем завершенные курсы студентам
+student.finished_courses += ['Введение в программирование']
+student_2.finished_courses += ['Эффективное саморазвитие']
+
+# Проверяющий выставляет оценки
 reviewer.rate_hw(student, 'Python', 5)
 reviewer.rate_hw(student, 'Python', 6)
 reviewer.rate_hw(student, 'Python', 7)
-
-print(student.rate_lecture(lecturer, 'Python', 7))  # None
-print(student.rate_lecture(lecturer, 'Java', 8))  # Ошибка
-print(student.rate_lecture(lecturer, 'С++', 8))  # Ошибка
-print(student.rate_lecture(reviewer, 'Python', 6))  # Ошибка
-
-
-student_2 = Student('Сергей', 'Сидоров', 'М')
-student_2.finished_courses += ['Эффективное саморазвитие']
-student_2.courses_in_progress += ['C++']
 reviewer.rate_hw(student_2, 'C++', 9)
 reviewer.rate_hw(student_2, 'C++', 9)
 
-lecturer_2 = Lecturer('Жанна', 'Баклажанова')
-lecturer_2.courses_attached += ['JS', 'Java', 'C++']
+# Оценка лекторов студентами
+student.rate_lecture(lecturer, 'Python', 7)
+student.rate_lecture(lecturer, 'Java', 8)
+student.rate_lecture(lecturer, 'С++', 8)
+student.rate_lecture(reviewer, 'Python', 6)
+student_2.rate_lecture(lecturer_2, 'Python', 3)
+student_2.rate_lecture(lecturer_2, 'C++', 4)
+student_2.rate_lecture(lecturer_2, 'C++', 5)
 
-print(student_2.rate_lecture(lecturer_2, 'Python', 3))  # Ошибка
-print(student_2.rate_lecture(lecturer_2, 'C++', 4))  # None
-print(student_2.rate_lecture(lecturer_2, 'C++', 5))  # None
-
-
-print(reviewer)
-print(lecturer)
+# Вывод метода __str__
 print(student)
 print(student_2)
+print(lecturer)
+print(lecturer_2)
+print(reviewer)
+print(reviewer_2)
 
+# Операции сравнения
 print(student < student_2)
 print(lecturer >= lecturer_2)
 print(student == student_2)
+
+students = [student, student_2]
+lecturers = [lecturer, lecturer_2]
+
+def calc_avg_students(students, course_name):
+    total = 0
+    count = 0
+    for student in students:
+        if course_name in student.grades:
+            total += sum(student.grades[course_name])
+            count += len(student.grades[course_name])
+    return total / count if count != 0 else 0
+
+def calc_avg_lecturers(lecturers, course_name):
+    total = 0
+    count = 0
+    for lecturer in lecturers:
+        if course_name in lecturer.grades:
+            total += sum(lecturer.grades[course_name])
+            count += len(lecturer.grades[course_name])
+    return total / count if count != 0 else 0
+
+course_name = 'Python'
+
+print(f"Cредняя оценка студентов по {course_name}: {calc_avg_students(students, course_name)}")
+print(f"Средняя оценка лекторов по {course_name}: {calc_avg_lecturers(lecturers, course_name)}")
+
