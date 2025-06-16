@@ -6,7 +6,6 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
-        self.average_grade_all_courses = 0
 
     def rate_lecture(self, lecturer, course, grade):
         if isinstance(lecturer,
@@ -18,36 +17,35 @@ class Student:
         else:
             return "Ошибка"
 
+    @property
     def count_average_grade(self):
         all_grades = [grade for course_grades in self.grades.values() for grade in course_grades]
-        if len(all_grades) != 0:
-            self.average_grade_all_courses = sum(all_grades) / len(all_grades)
+        return sum(all_grades) / len(all_grades) if all_grades else 0
 
     def __lt__(self, other):
         if isinstance(other, Student):
-            return self.average_grade_all_courses < other.average_grade_all_courses
+            return self.count_average_grade < other.count_average_grade
 
     def __le__(self, other):
         if isinstance(other, Student):
-            return self.average_grade_all_courses <= other.average_grade_all_courses
+            return self.count_average_grade <= other.count_average_grade
 
     def __gt__(self, other):
         if isinstance(other, Student):
-            return self.average_grade_all_courses > other.average_grade_all_courses
+            return self.count_average_grade > other.count_average_grade
 
     def __ge__(self, other):
         if isinstance(other, Student):
-            return self.average_grade_all_courses >= other.average_grade_all_courses
+            return self.count_average_grade >= other.count_average_grade
 
     def __eq__(self, other):
         if isinstance(other, Student):
-            return self.average_grade_all_courses == other.average_grade_all_courses
+            return self.count_average_grade == other.count_average_grade
 
     def __str__(self):
-        self.count_average_grade()
         return (f'Имя: {self.name}\n'
                 f'Фамилия: {self.surname}\n'
-                f'Средняя оценка за домашние задания: {self.average_grade_all_courses}\n'
+                f'Средняя оценка за домашние задания: {self.count_average_grade}\n'
                 f'Курсы в процессе изучения: {", ".join(self.courses_in_progress)}\n'
                 f'Завершенные курсы: {", ".join(self.finished_courses)}\n')
 
@@ -64,38 +62,36 @@ class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades = {}
-        self.average_grade_all_courses = 0
 
+    @property
     def count_average_grade(self):
         all_grades = [grade for course_grades in self.grades.values() for grade in course_grades]
-        if len(all_grades) != 0:
-            self.average_grade_all_courses = sum(all_grades) / len(all_grades)
+        return sum(all_grades) / len(all_grades) if all_grades else 0
 
     def __lt__(self, other):
         if isinstance(other, Lecturer):
-            return self.average_grade_all_courses < other.average_grade_all_courses
+            return self.count_average_grade < other.count_average_grade
 
     def __le__(self, other):
         if isinstance(other, Lecturer):
-            return self.average_grade_all_courses <= other.average_grade_all_courses
+            return self.count_average_grade <= other.count_average_grade
 
     def __gt__(self, other):
         if isinstance(other, Lecturer):
-            return self.average_grade_all_courses > other.average_grade_all_courses
+            return self.count_average_grade > other.count_average_grade
 
     def __ge__(self, other):
         if isinstance(other, Lecturer):
-            return self.average_grade_all_courses >= other.average_grade_all_courses
+            return self.count_average_grade >= other.count_average_grade
 
     def __eq__(self, other):
         if isinstance(other, Lecturer):
-            return self.average_grade_all_courses == other.average_grade_all_courses
+            return self.count_average_grade == other.count_average_grade
 
     def __str__(self):
-        self.count_average_grade()
         return (f"Имя: {self.name}\n"
                 f"Фамилия: {self.surname}\n"
-                f"Средняя оценка за лекции: {self.average_grade_all_courses:.1f}\n")
+                f"Средняя оценка за лекции: {self.count_average_grade:.1f}\n")
 
 
 class Reviewer(Mentor):
@@ -154,7 +150,7 @@ reviewer.rate_hw(student_2, 'C++', 9)
 student.rate_lecture(lecturer, 'Python', 7)
 student.rate_lecture(lecturer, 'Java', 8)
 student.rate_lecture(lecturer, 'С++', 8)
-student.rate_lecture(reviewer, 'Python', 6)
+student.rate_lecture(lecturer, 'Python', 6)
 student_2.rate_lecture(lecturer_2, 'Python', 3)
 student_2.rate_lecture(lecturer_2, 'C++', 4)
 student_2.rate_lecture(lecturer_2, 'C++', 5)
